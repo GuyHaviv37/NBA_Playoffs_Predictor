@@ -72,7 +72,7 @@ Creator for TeamBox - including the image, text, and games-won input
 */
 const createTeamBox = (teamAbbrv,matchup,side)=>{
     const [conf,round,series] = matchup.split('-');
-    const seeds = conf==='east' ? eastSeeds : westSeeds;
+    let seeds = eastSeeds.includes(teamAbbrv) ? eastSeeds : westSeeds  
     const team = document.createElement('div');
     team.abbrv = teamAbbrv;
     const teamImg = document.createElement('img');
