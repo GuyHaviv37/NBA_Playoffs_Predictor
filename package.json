@@ -4,7 +4,9 @@
   "description": "NBA Playoffs Prediction App",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start" : "node app.js"
+
   },
   "author": "Guy Haviv",
   "license": "ISC",
