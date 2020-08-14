@@ -126,6 +126,24 @@ module.exports = {
                 let seeds = conf === 'east' ? eastSeeds : westSeeds;
                 homeTeam = teamInfo[seeds[matchup]].teamName;
                 awayTeam = teamInfo[seeds[9-matchup]].teamName;
+                switch(matchup){
+                    case '1':
+                    homeTeam = seeds[1];
+                    awayTeam = seeds[8];
+                    break;
+                    case '2':
+                    homeTeam = seeds[4];
+                    awayTeam = seeds[5];
+                    break;
+                    case '3':
+                    homeTeam = seeds[2];
+                    awayTeam = seeds[7];
+                    break;
+                    case '4': 
+                    homeTeam = seeds[3];
+                    awayTeam = seeds[6];
+                    break;
+                }
                 homeTeamScore = body[`${conf}-fr-${matchup}|home`] ? body[`${conf}-fr-${matchup}|home`] : 0;
                 awayTeamScore = body[`${conf}-fr-${matchup}|away`] ? body[`${conf}-fr-${matchup}|away`] : 0;
                 if(homeTeamScore === '4'){
