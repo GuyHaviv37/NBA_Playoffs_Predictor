@@ -113,6 +113,28 @@ const calculatePotScore = (adminBracket,userBracket)=>{
     return newPotScore;
 }
 
+const getTeamAbbrvs = (matchupStr)=>{
+    const [conf,round,matchup] = matchupStr.split('-');
+    if(round !== 'fr'){
+        return ['NA','NA']
+    }
+    if(conf === 'east'){
+        switch(matchup){
+            case '1': return [eastSeeds[1],eastSeeds[8]]
+            case '2': return [eastSeeds[4],eastSeeds[5]]
+            case '3': return [eastSeeds[2],eastSeeds[7]]
+            case '4': return [eastSeeds[3],eastSeeds[6]]
+        }
+    } else{
+        switch(matchup){
+            case '1': return [westSeeds[1],westSeeds[8]]
+            case '2': return [westSeeds[4],westSeeds[5]]
+            case '3': return [westSeeds[2],westSeeds[7]]
+            case '4': return [westSeeds[3],westSeeds[6]]
+        }
+    }
+}
+
 
 module.exports = {
     parsePredictions(body){
@@ -124,24 +146,10 @@ module.exports = {
         for(let matchup=1;matchup<=4;matchup++){
             for(let conf of confs){
                 let seeds = conf === 'east' ? eastSeeds : westSeeds;
-                switch(matchup){
-                    case '1':
-                    homeTeam = seeds[1];
-                    awayTeam = seeds[8];
-                    break;
-                    case '2':
-                    homeTeam = seeds[4];
-                    awayTeam = seeds[5];
-                    break;
-                    case '3':
-                    homeTeam = seeds[2];
-                    awayTeam = seeds[7];
-                    break;
-                    case '4': 
-                    homeTeam = seeds[3];
-                    awayTeam = seeds[6];
-                    break;
-                }
+                let homeSeed = getTeamAbbrvs(`${conf}-fr-${matchup}`)[0]
+                let awaySeed = getTeamAbbrvs(`${conf}-fr-${matchup}`)[1]
+                homeTeam = teamInfo[homeSeed].teamName;
+                awayTeam = teamInfo[awaySeed].teamName;
                 homeTeamScore = body[`${conf}-fr-${matchup}|home`] ? body[`${conf}-fr-${matchup}|home`] : 0;
                 awayTeamScore = body[`${conf}-fr-${matchup}|away`] ? body[`${conf}-fr-${matchup}|away`] : 0;
                 if(homeTeamScore === '4'){

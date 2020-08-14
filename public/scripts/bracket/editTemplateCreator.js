@@ -32,7 +32,7 @@ const assignFirstRound = ()=>{
                 let homeTeamName = container.querySelector(`#${conf}-fr-${matchup} .home-team .team-name-text`).innerText;
                 let awayTeamName = container.querySelector(`#${conf}-fr-${matchup} .away-team .team-name-text`).innerText;
                 let matchupResults = predictions[`${conf}-fr-${matchup}`];
-                let winningTeam = matchupResults.winningTeam;
+                let winningTeam = ' '+matchupResults.winningTeam;
                 homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
                 awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
                 homeInput.dispatchEvent(new Event('input'));
@@ -52,7 +52,7 @@ const assignSemiFinals = ()=>{
                 let homeTeamName = container.querySelector(`#${conf}-sf-${matchup} .home-team .team-name-text`).innerText;
                 let awayTeamName = container.querySelector(`#${conf}-sf-${matchup} .away-team .team-name-text`).innerText;
                 let matchupResults = predictions[`${conf}-sf-${matchup}`];
-                let winningTeam = matchupResults.winningTeam;
+                let winningTeam = ' '+matchupResults.winningTeam;
                 homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
                 awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
                 homeInput.dispatchEvent(new Event('input'));
@@ -71,7 +71,7 @@ const assignConfFinals = ()=>{
             let homeTeamName = container.querySelector(`#${conf}-cf-1 .home-team .team-name-text`).innerText;
             let awayTeamName = container.querySelector(`#${conf}-cf-1 .away-team .team-name-text`).innerText;
             let matchupResults = predictions[`${conf}-cf-1`];
-            let winningTeam = matchupResults.winningTeam;
+            let winningTeam = ' '+matchupResults.winningTeam;
             homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
             awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
             homeInput.dispatchEvent(new Event('input'));
@@ -87,7 +87,7 @@ const assignFinals = ()=>{
         let homeTeamName = container.querySelector(`#all-finals-1 .home-team .team-name-text`).innerText;
         let awayTeamName = container.querySelector(`#all-finals-1 .away-team .team-name-text`).innerText;
         let matchupResults = predictions[`all-finals-1`];
-        let winningTeam = matchupResults.winningTeam;
+        let winningTeam = ' '+matchupResults.winningTeam;
         homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
         awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
         homeInput.dispatchEvent(new Event('input'));
