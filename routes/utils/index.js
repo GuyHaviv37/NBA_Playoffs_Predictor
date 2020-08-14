@@ -124,8 +124,6 @@ module.exports = {
         for(let matchup=1;matchup<=4;matchup++){
             for(let conf of confs){
                 let seeds = conf === 'east' ? eastSeeds : westSeeds;
-                homeTeam = teamInfo[seeds[matchup]].teamName;
-                awayTeam = teamInfo[seeds[9-matchup]].teamName;
                 switch(matchup){
                     case '1':
                     homeTeam = seeds[1];
