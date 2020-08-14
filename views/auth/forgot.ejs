@@ -1,0 +1,24 @@
+<%- include('../partials/header.ejs')  %> 
+
+<div class="container form-container topContainer shadow">
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %> 
+        </div>
+    <% } %>
+    <% if (success && success.length > 0) { %>
+        <div class="alert alert-success" role="alert">
+            <%= success %> 
+        </div>
+    <% } %>
+    <form action="/forgot" method="post">
+        <div class="form-group">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-text">Please enter the email address linked to your Account</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Reset Password</button>
+    </form>
+</div>
+    
+<%- include('../partials/footer.ejs')  %> 

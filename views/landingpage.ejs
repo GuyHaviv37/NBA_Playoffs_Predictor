@@ -1,0 +1,81 @@
+<%- include('./partials/header.ejs')  %> 
+    <% if(success && success.length > 0){ %> 
+        <div class="alert alert-primary" role="alert">
+            <%= success %> 
+        </div>
+    <% } %> 
+    <div class="topContainer text-center">
+        <h1>Welcome to NBA Playoffs Predictor</h1>
+    <% if (currentUser) { %>
+        <div class="card user-card shadow">
+            <h4 class="card-header">Hello, <%= currentUser.username %> </h4>
+            <div class="card-body">
+                <a href="/bracket" class="btn btn-lg btn-info">Go to Dashboard</a>
+            </div>
+        </div>
+    <% } else { %>
+            <div class="lp-card-container">
+                <div class="card">
+                    <h4 class="card-header">
+                        Step 1
+                    </h4>
+                    <div class="card-body">
+                        <h5 class="card-title">About</h5>
+                        <blockquote class="blockquote mb-0">
+                            <p>
+                                NBA Playoffs Predictions started out as game between friends and family.
+                            This year, partly because of COVID-19, I tried making things a little BIGGER.
+                            This site is still at a beta stage, hope you enjoy it.
+                            Before Playing, <strong>I highly recommend looking at the rules of the game first (FAQ).</strong>
+                            </p>
+                            <footer class="blockquote-footer">Guy Haviv, <cite title="Source Title">Site Creator</cite></footer>
+                        </blockquote>
+                        <hr>
+                        <a href="/faq" class="btn btn-primary">FAQ</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4 class="card-header">
+                        Step 2
+                    </h4>
+                    <div class="card-body">
+                        <h5 class="card-title">Start Playing</h5>
+                        <blockquote class="blockquote mb-0">
+                        <p>
+                            Playing is easy!
+                            If you haven't already, Sign Up and create an account.
+                        </p>
+                        <a href="/signup" class="btn btn-primary">Sign Up</a>
+                        <hr>
+                        <p>
+                            If you have an account <a href="/signin">Sign In</a> and go to the <a href="/bracket">Dashboard</a>
+                            to create a Bracket, edit your existing one, or check your score.
+                        </p>
+                        <p><strong>Consider Deadline Times for submitting a Bracket !!</strong></p>
+                        <p>Bonus Points available for early submitters !</p>
+                        </blockquote>   
+                    </div>
+                </div>
+                <div class="card">
+                    <h4 class="card-header">
+                        Step 3
+                    </h4>
+                    <div class="card-body">
+                        <h5 class="card-title">Compete With Friends</h5>
+                        <blockquote class="blockquote mb-0">
+                        <p>
+                            You can checkout yours and your fellow "Bracket-ers" scores at the Leaderboard!
+                            See who has the highest Score, or who has highest Potential Score!
+                        </p>
+                        <p>Go for the #1 Rank !</p> 
+                        <hr>
+                        <a href="/leaderboard" class="btn btn-primary">Leaderboard</a>
+                        </blockquote>   
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+
+
+<%- include('./partials/footer.ejs')  %> 

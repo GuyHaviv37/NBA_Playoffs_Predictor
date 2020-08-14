@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/forms.css">
+    <link rel="stylesheet" href="/stylesheets/brackets.css">
+    <link rel="stylesheet" href="/stylesheets/leaderboard.css">
+    <!-- <script src="https://kit.fontawesome.com/5edfdf5554.js" crossorigin="anonymous"></script> -->
+
+    <title>NBA Playoffs Predictor</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e9c46a;">
+        <a class="navbar-brand" href="/">🏀 NBAPP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/bracket">My Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/leaderboard">Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/faq">FAQ</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <!-- Should be changed if User is logged in -->
+            <% if (currentUser) { %>
+             <li class="nav-item">
+               <a href="#" class="nav-link disabled">Signed In as - <%= currentUser.username %> </a>
+             </li>
+             <li class="nav-item">
+               <a href="/signout" class="nav-link">Sign Out</a>
+             </li>
+            <% } else { %>
+              <li class="nav-item">
+                <a href="/signin" class="nav-link">Sign In</a>
+              </li>
+              <li class="nav-item">
+                <a href="/signup" class="nav-link">Sign Up</a>
+              </li>
+            <% } %> 
+          </ul>
+        </div>
+      </nav>
+
+

@@ -1,0 +1,28 @@
+<%- include('../partials/header.ejs')  %> 
+
+<div class="container form-container topContainer shadow">
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %> 
+        </div>
+    <% } %>
+    <form action="/signin" method="post">
+        <div class="form-group">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+    <hr>
+    <div class="more-info">
+            Don't have an account yet ? <a href="/signup"> Sign Up!</a> | 
+            <a href="/forgot">Forgot Password ?</a>
+    </div>
+</div>
+    
+<%- include('../partials/footer.ejs')  %> 
+    

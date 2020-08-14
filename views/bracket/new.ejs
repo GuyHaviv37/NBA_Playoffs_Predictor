@@ -1,0 +1,46 @@
+<%- include('../partials/header.ejs')  %> 
+<% if (error && error.length > 0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%= error %> 
+    </div>
+<% } %>
+<form action="/bracket/new" method="POST" id="bracket-form">
+    <div class=" bracketTemplate">
+        <div class="sidebar">
+            <div class="form-group sidebar-form">
+                <label for="bracketName">Enter Bracket Name:</label>
+                <input class="form-control" type="text" name="bracketName" placeholder="<%=currentUser.username %>'s Bracket">
+            </div>
+            <div class="sidebar-form" id="winner-box">
+                Your Selected Winner:<br>
+                <p id="winner-box-text"></p>
+            </div>
+            <div id="btn-form">
+                <button class="btn btn-success" type="submit">SUBMIT BRACKET</button>
+            </div>
+            <div class="sidebar-form">
+                <p class="custom-p">
+                    <strong>Instructions:</strong>
+                    1. Select your Playin Matchup Winner
+                    2. Select a series score (e.g. 4-2) to each Matchup
+                    3. Make sure you fill EVERY MATCHUP
+                    4. Give the Bracket a Name (optional)
+                    5. Submit
+                </p>
+            </div>
+        </div>
+        <div class="bracket-container">
+            <div id="header">
+                <div>CONF. First Round</div>
+                <div>CONF. Semi-Finals</div>
+                <div>CONF. Finals</div>
+                <div>NBA Finals</div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="/scripts/bracket/teamInfo.js"></script>
+<script src="/scripts/bracket/bracketCreators.js"></script>
+<script src="/scripts/bracket/newTemplateCreator.js"></script>
+<%- include('../partials/footer.ejs')  %> 

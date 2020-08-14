@@ -1,0 +1,48 @@
+<%- include('../partials/header.ejs')  %> 
+
+<div class="container topContainer leaderboard-container">
+    <h1 class="text-center">Leaderboard</h1>
+    <hr>
+    <!-- check if no brackets submitted -->
+    <% brackets.forEach(bracket => { %>
+     <div class="card leaderboard-card">
+        <div class="card-body leaderboard-body">
+            <div class="leaderboard-rank">
+                <h5>Rank</h5>
+                <span class="leaderboard-text"><%= bracket.rank %> </span>
+            </div>
+            <div class="leaderboard-bracket-name">
+                <h5>Bracket Name</h5>
+                <% if (moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                 <a href="/bracket/<%= bracket._id %>"><%= bracket.bracketName %></a>
+                 <% } else { %>
+                    <span class="leaderboard-text"><%= bracket.bracketName %> </span>
+                <% } %> 
+            </div>
+            <div class="leaderboard-score">
+                <h5>Score</h5>
+                <span class="leaderboard-text"><%= bracket.score %> </span>
+            </div>
+            <div class="leaderboard-pot-score">
+                <h5>Pot. Score</h5>
+                <span class="leaderboard-text"><%= bracket.potentialScore %> </span>
+            </div>
+            <div class="leaderboard-winner">
+                <h5>Winner</h5>
+                <% if (moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                    <span class="leaderboard-text"><%= bracket.winner %> </span>
+                <% } else { %>
+                    <span class="leaderboard-text">N/A </span>
+                <% } %> 
+            </div>
+            <div class="leaderboard-owner">
+                <h5>Owner</h5>
+                <span class="leaderboard-text"><%= bracket.owner.username %> </span>
+            </div>
+        </div>
+     </div>
+    <% }) %> 
+</div>
+
+
+<%- include('../partials/footer.ejs')  %> 

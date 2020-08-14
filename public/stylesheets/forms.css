@@ -1,0 +1,18 @@
+.form-container{
+    width : 50%;
+    border : 1px solid black;
+    border-radius: 25px;
+    padding : 20px;
+    background-color: rgb(245, 245, 237);
+}
+.form-label{
+    font-size: 18px;
+}
+
+.more-info{
+    margin-top: 5px;
+}
+
+.text-error{
+    color: red;
+}

@@ -1,0 +1,64 @@
+<%- include('../partials/header.ejs')  %> 
+    <div class="container dashboard-container topContainer">
+        <% if (error && error.length > 0) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %> 
+            </div>
+        <% } %>
+        <% if (!bracket) { %>
+            <!-- No bracket: create one to show dashboard -->
+            <div class="jumbotron jumbo-dash shadow">
+                <h1 class="display-3">Hi There!</h1>
+                <% if (moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                    <p class="lead">
+                        It's seemd like you don't have a Bracket yet.
+                        Unfortunately, Bracket creation is disabled at this time.
+                    </p>
+                <% } else { %>
+                    <p class="lead">
+                        It seems like you don't have a Bracket yet, so there's nothing to show here.
+                        Create a new Bracket now and join the fun!
+                    </p>
+                    <a href="/bracket/new" class="btn btn-success btn-lg">Create</a>
+                    <hr>
+                    If you have any questions, try looking in the <a href="/faq">FAQ</a>
+                <% } %> 
+            </div>
+        <% } else { %>
+            <!-- Regular Dashboard -->
+            <div class="card shadow">
+                <div class="card-header dashboard-header"><h3><%= bracket.bracketName %> </h3></div>
+                <div class="card-body dashboard-body">
+                    <div class="dashboard-rank">
+                        <h5>Rank</h5>
+                        <span><%= bracket.rank %> </span>
+                    </div>
+                    <div class="dashboard-score">
+                        <h5>Score</h5>
+                        <span><%= bracket.score %> </span>
+                    </div>
+                    <div class="dashboard-pot-score">
+                        <h5>Pot. Score</h5>
+                        <span><%= bracket.potentialScore %> </span>
+                    </div>
+                    <div class="dashboard-winner">
+                        <h5>Winner</h5>
+                        <span><%= bracket.winner %> </span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="centered-button-group">
+                        <a href="/bracket/<%= bracket._id %>" class="btn btn-info">Review</a>
+                        <% if (!moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                        <form action="/bracket/<%= bracket._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                            <a href="/bracket/<%= bracket._id %>/edit" class="btn btn-warning">Edit</a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% } %> 
+    </div>
+    
+<%- include('../partials/footer.ejs')  %> 

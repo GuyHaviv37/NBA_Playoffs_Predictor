@@ -1,0 +1,54 @@
+<%- include('../partials/header.ejs')  %> 
+<% if (error && error.length > 0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%= error %> 
+    </div>
+<% } %>
+<form action="/bracket/<%= bracket._id %>/edit?_method=PUT" method="POST" id="bracket-form">
+    <div class=" bracketTemplate">
+        <div class="sidebar">
+            <input type="text" name="bracketName" placeholder="Enter Bracket Name">
+            <button type="submit">SUBMIT</button>
+            <div class="sidebar-form">
+                <div class="show-bracket-name">
+                    <h5><%= bracket.bracketName %> </h5>
+                </div>
+                <div class="show-scores">
+                    <div class="show-score">
+                        Score:
+                        <strong><%= bracket.score %></strong>
+                    </div> 
+                    <div class="show-score">
+                        Potential Score:
+                        <strong><%= bracket.potentialScore %></strong>
+                    </div>
+                </div>
+                <hr>
+                <div class="show-playing">
+                    <p class="custom-p">Who Will Win The Play-in Tournument ?
+                    <%= teamInfo[bracket.predictions.playin].teamName %> </p>
+                </div>
+                <div id="winner-box"></div>
+            </div>
+        </div>
+        <div class="bracket-container">
+            <div id="header">
+                <div>CONF. First Round</div>
+                <div>CONF. Semi-Finals</div>
+                <div>CONF. Finals</div>
+                <div>NBA Finals</div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="/scripts/bracket/teamInfo.js"></script>
+<script src="/scripts/bracket/bracketCreators.js"></script>
+<script type="text/javascript">
+    const getBracketObject = ()=>{
+        return <%- JSON.stringify(bracket) %>; 
+    } 
+</script>
+<script src="/scripts/bracket/editTemplateCreator.js"></script>
+<script src="/scripts/bracket/showTemplateCreator.js"></script>    
+<%- include('../partials/footer.ejs')  %> 

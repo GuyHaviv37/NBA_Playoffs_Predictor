@@ -1,0 +1,112 @@
+<%- include('./partials/header.ejs')  %>
+<div class="topContainer container faq-container">
+    <div class="card faq-card">
+        <h3 class="card-title">Rules & Frequently Asked Questions</h3>
+        <hr>
+        <h5 class="card-subtitle faq-header">Account and Sign Up</h5>
+        <ul>
+            <li>
+                <p class="custom-p">Q : Why should I Sign Up?
+                A : In order to play 'NBA Playoffs Bracket' you must have an Account.
+                    Your Account will be used to manage and edit your Bracket at all times until relevent submission deadlines.
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : How do I Sign Up?
+                A : You can Sign Up <a href="/signup">Here</a>.
+                <em>Notice you will need to remember your Username and Password to sign in!</em>
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : Why do you need my email address ?
+                A : Email address is needed for 'forgot password' feature.
+                There will be no use of you email for any other use.
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : I forgot my password, what do I do ???
+                A : You can reset your password, using the email you provided to the account <a href="/forgot">Here</a>.
+                (This feature is in beta mode)
+                </p>
+            </li>
+        </ul>
+        <h5 class="card-subtitle faq-header">Submission Deadlines</h5>
+        <ul>
+            <li>
+                <p class="custom-p"> There are two Deadlines for Bracket submission:
+                    - Playin Deadline :  <strong>Friday August 14th</strong>.
+                    - Bracket Deadline : <strong>Sunday August 16th</strong>.
+                    Only Brackets last updated before Playin Deadline are eligible for Playin points.
+                    All Brackets must be submitted before Bracket Deadline, you can edit your Bracket any time before the Deadline,
+                    After that, it is locked for the reminder of the Playoffs. 
+                </p>
+            </li>
+        </ul>
+        <h5 class="card-subtitle faq-header">Bracket Building</h5>
+        <ul>
+            <li>
+                <p class="custom-p">Q : How do I build a Bracket ?
+                A : After creating an account, <a href="/signin">Sign In</a> and go to the <a href="/bracket">Dashboard</a>.
+                From there, click Create to go the the Bracket Builder.
+                Then, simply fill the scores <em>for all matchups</em>, including the Playin Matchup!
+                You can give your Bracket a Name - in the according input.
+                Your Bracket is private to view untill Bracket Deadline.
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : Why when I click Submit it returns an error ?
+                A : <strong>Brackets are only submitted if filled FULLY</strong>
+                Meaning - you must give a series prediction (score) for ALL series,
+                Including Playin Matchup (even after Playin Deadline passed).
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : O.K, I created a Bracket, now what ?
+                A : You can now Review your bracket at any time.
+                You can also Edit your bracket how many times you want before the Bracket Deadline.
+                Notice - If you Edit your bracket (click Submit in Edit page), it can effect your Playin Score (after Playin Deadline).
+                </p>
+            </li>
+        </ul>
+        <h5 class="card-subtitle faq-header">Scoring</h5>
+        <ul>
+            <li>
+                <p class="custom-p">Q : How can I get points?
+                A : Scoring is based on winner prediction and correct series score prediction.
+                You earn points for:
+                - Correctly guessing the series winner (e.g "Miami Heat")
+                - Extra Points are given if correctly guessing series score (e.g "4-2")
+                Notice, you can earn point for correct series score <em>only if you have both teams correctly guessed for that series</em>.
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : How is Score calculated?
+                A : Scoring is based on correct predictions.
+                <strong>Each round is scored differently</strong> where later rounds are more significant than later rounds.
+                Playin Tournament correct guess : 10 pts. (<em>Only if submitted in time!</em>)
+                First Round : Correct Winner - 10pts / Exact Series Score - 10pts.
+                Conf. Semi-Finals : 20pts / 20pts.
+                Conf. Finals : 30pts / 30Pts.
+                Finals : 50pts / 50pts.
+                </p>
+            </li>
+            <li>
+                <p class="custom-p">Q : What is Potential Score?
+                A : Potential Score is the maximum sum of points a Bracket can still get in the future.
+                Each Bracket starts with a perfect Potential Score of 550 (All series correctly predicted).
+                If a team you predicted to go far is eliminated, your Potential Score will decrease accordingly.
+                </p>
+            </li>
+        </ul>
+        <h5 class="card-subtitle faq-header">Leaderboard</h5>
+        <ul>
+            <li>
+                <p class="custom-p">Q : Where can I see how good am I ???
+                A : You can see your Score and Rank among all Brackets in Dashboard, or at the Leaderboard.
+                After Bracket Deadline, you can also review other player's Bracket.
+                </p>
+            </li>
+        </ul>
+    </div>
+</div>
+<%- include('./partials/footer.ejs')  %> 

@@ -1,0 +1,20 @@
+<%- include('../partials/header.ejs')  %> 
+
+<div class="container form-container topContainer shadow">
+    <% if (error && error.length > 0) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %> 
+        </div>
+    <% } %>
+    <form action="/reset/<%= token %>" method="post">
+        <div class="form-group">
+            <label for="newPassword" class="form-label">New Password:</label>
+            <input type="password" class="form-control" name="newPassword" id="newPassword">
+            <label for="confirmPassword" class="form-label">Confirm Password:</label>
+            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword">
+        </div>
+        <button type="submit" class="btn btn-primary">Update Password</button>
+    </form>
+</div>
+    
+<%- include('../partials/footer.ejs')  %> 

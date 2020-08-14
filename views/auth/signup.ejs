@@ -1,0 +1,56 @@
+<%- include('../partials/header.ejs')  %> 
+
+<div class="container form-container topContainer shadow">
+    <form action="/signup" method="post">
+        <% if (error && error.length > 0) { %>
+         <div class="alert alert-danger" role="alert">
+             <%= error %> 
+         </div>
+        <% } %>
+        <div class="form-group">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="username"  name="username" aria-describedby="usernameHelp">
+            <% if (checkErrors && checkErrors['username']) { %>
+                <small id="usernameHelp" class="form-text text-error">Username must be between 4 and 30 characters longs</small>
+            <% } else { %>
+                <small id="usernameHelp" class="form-text text-muted">Username must be between 4 and 30 characters longs</small>
+            <% } %> 
+        </div>
+        <div class="form-group">
+            <label for="email" class="form-label">E-mail Address:</label>
+            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp">
+            <% if (checkErrors && checkErrors['email']) { %>
+                <small id="usernameHelp" class="form-text text-error">Please enter a valid e-mail address</small>
+            <% } %> 
+        </div>
+        <div class="form-row form-group">
+            <div class="col-md-6">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp">
+                <% if (checkErrors && checkErrors['password']) { %>
+                    <small id="passwordHelp" class="form-text text-error">Password must be at least 6 characters long</small>
+                <% } else { %>
+                    <small id="passwordHelp" class="form-text text-muted">Password must be at least 6 characters long</small>
+                <% } %> 
+            </div>
+            <div class="col-md-6">
+                <label for="passwordConfirmation" class="form-label">Confirm Password:</label>
+                <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" aria-describedby="passwordConfirmationHelp">
+                <% if (checkErrors && checkErrors['passwordConfirmation']) { %>
+                    <small id="passwordConfirmationHelp" class="form-text text-error">Password and Password Confirmation must match</small>
+                <% } %>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up!</button>
+    </form>
+    <hr>
+    <div class="more-info">
+            Already have an account? <a href="/signin"> Sign In</a>
+    </div>
+    
+    
+    
+</div>
+
+
+<%- include('../partials/footer.ejs')  %> 
