@@ -97,6 +97,9 @@ module.exports = {
         }
     },
     isDeadlinePassed(req,res,next){
+        if(req.user.isAdmin){
+            return next();
+        }
         if(moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))){
             req.flash('error','Cannot preform this operation after submit deadline');
             return res.redirect('/bracket')
