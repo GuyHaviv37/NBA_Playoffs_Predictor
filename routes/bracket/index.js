@@ -79,7 +79,7 @@ router.put('/bracket/:id/edit',isLoggedIn,checkBracketOwnership,isDeadlinePassed
 })
 
 // DESTORY ROUTES
-router.delete('/bracket/:id',isLoggedIn,isDeadlinePassed,checkBracketOwnership,async (req,res)=>{ //add checkBracketOwnership
+router.delete('/bracket/:id',isLoggedIn,isDeadlinePassed,checkBracketOwnership,async (req,res)=>{
     try{
         await Bracket.findByIdAndDelete(req.params.id);
         res.redirect('/bracket');
