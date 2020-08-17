@@ -2,7 +2,7 @@ const Bracket = require("../../models/bracket");
 const {teamInfo} = require('./teamInfo')
 const moment = require('moment');
 
-const SUBMIT_DEADLINE =  '2020-08-17';
+const SUBMIT_DEADLINE =  '2020-08-18';
 const PLAYIN_DEADLINE =  '2020-08-15T16:00:00';
 
 westSeeds = ['west','LAL','LAC','DEN','OKC','HOU','UTA','DAL','NA'];
@@ -57,11 +57,9 @@ const calculateMatchupPotScore = (adminBracket,userBracket,eliminated,pred,basic
 
 const calculateScore = (adminBracket,userBracket)=>{
     let newScore = 0;
-    console.log(`last update rule ${moment(PLAYIN_DEADLINE).isAfter(moment(userBracket.lastUpdated))}`);
     if(adminBracket.predictions.playin && (adminBracket.predictions.playin === userBracket.predictions.playin)
         && (moment(PLAYIN_DEADLINE).isAfter(moment(userBracket.lastUpdated)))){
         newScore+=10;
-        console.log(`added 10 bonus points`);
     }
     for(pred in adminBracket.predictions){
         if((adminBracket.predictions[pred].winningScore === 0 && adminBracket.predictions[pred].losingScore === 0) || (pred === 'playin')){
@@ -246,10 +244,8 @@ module.exports = {
         return new Promise(async (res,rej)=>{
             const brackets = await Bracket.find({});
             for(let bracket of brackets){ // update score
-                console.log(`Updating score for ${bracket.bracketName}`);
                 bracket.score = calculateScore(adminBracket,bracket);
                 bracket.potentialScore = calculatePotScore(adminBracket,bracket);
-                console.log(`New Score ${bracket.score}`);
                 await bracket.save();
             }
             brackets.sort((a,b)=> b.score - a.score); //sort by score to update rank

@@ -49,11 +49,11 @@
                 <div class="card-footer">
                     <div class="centered-button-group">
                         <a href="/bracket/<%= bracket._id %>" class="btn btn-info">Review</a>
-                        <% if (!moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                        <% if (!moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) || currentUser.isAdmin{ %>
                         <form action="/bracket/<%= bracket._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-danger">Delete</button>
                         </form>
-                            <a href="/bracket/<%= bracket._id %>/edit" class="btn btn-warning">Edit</a>
+                        <a href="/bracket/<%= bracket._id %>/edit" class="btn btn-warning">Edit</a>
                         <% } %>
                     </div>
                 </div>
