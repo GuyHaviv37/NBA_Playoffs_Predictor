@@ -2,7 +2,7 @@ const Bracket = require("../../models/bracket");
 const {teamInfo} = require('./teamInfo')
 const moment = require('moment');
 
-const SUBMIT_DEADLINE =  '2020-08-18';
+const SUBMIT_DEADLINE =  '2020-08-17';
 const PLAYIN_DEADLINE =  '2020-08-15T16:00:00';
 
 westSeeds = ['west','LAL','LAC','DEN','OKC','HOU','UTA','DAL','NA'];
