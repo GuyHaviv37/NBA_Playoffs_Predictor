@@ -1,7 +1,4 @@
 const { CLIENT_RENEG_LIMIT } = require('tls');
-const API_KEY = process.env['MAILGUN_API_KEY'];
-const DOMAIN = process.env['MAILGUN_DOMAIN'];
-const mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 
 const express = require('express'),
 passport = require('passport'),
@@ -82,49 +79,38 @@ router.post("/forgot", (req, res, next) => {
                 });
             });
         },
-        function (token,user,done){
-            const data = {
-                from: 'Excited User <me@samples.mailgun.org>',
-                to: 'guyhaviv37@walla.com',
-                subject: 'Hello',
-                text: 'Testing some Mailgun awesomeness!'
-              };
-              mailgun.messages().send(data, (error, body) => {
-                console.log(body);
-              });
+        function (token, user, done) {
+            const smptTransport = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: 'guyhavivcodes@gmail.com',
+                    pass: process.env.GMAILPW
+                },
+                //Added because of a valid certificate error
+                host: 'smtp.gmail.com',
+                port: 587,
+                ignoreTLS: false,
+                secure: false,
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+            const mailOptions = {
+                to: user.email,
+                from: 'guyhavivcodes@gmail.com',
+                subject: 'NBA Playoffs Predictor Account Password Reset',
+                text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                    'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            };
+            smptTransport.sendMail(mailOptions, function (err) {
+                if (err) console.log("error in sendMail" + err);
+                console.log("reset password mail has been sent");
+                req.flash('success', `An e-mail was sent to ${user.email} with further instructions`);
+                done(err, 'done');
+            });
         }
-        // function (token, user, done) {
-        //     const smptTransport = nodemailer.createTransport({
-        //         service: 'Gmail',
-        //         auth: {
-        //             user: 'guyhavivcodes@gmail.com',
-        //             pass: process.env.GMAILPW
-        //         },
-        //         //Added because of a valid certificate error
-        //         host: 'smtp.gmail.com',
-        //         port: 587,
-        //         ignoreTLS: false,
-        //         secure: false,
-        //         tls: {
-        //             rejectUnauthorized: false
-        //         }
-        //     });
-        //     const mailOptions = {
-        //         to: user.email,
-        //         from: 'guyhavivcodes@gmail.com',
-        //         subject: 'NBA Playoffs Predictor Account Password Reset',
-        //         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-        //             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        //             'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-        //             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        //     };
-        //     smptTransport.sendMail(mailOptions, function (err) {
-        //         if (err) console.log("error in sendMail" + err);
-        //         console.log("reset password mail has been sent");
-        //         req.flash('success', `An e-mail was sent to ${user.email} with further instructions`);
-        //         done(err, 'done');
-        //     });
-        // }
         ], function (err) {
             if (err) return next(err);
             res.redirect('/forgot');
