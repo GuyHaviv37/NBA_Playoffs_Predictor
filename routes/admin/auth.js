@@ -87,7 +87,6 @@ router.post("/forgot", (req, res, next) => {
                     pass: process.env.GMAILPW
                 },
                 //Added because of a valid certificate error
-                host: 'smtp.gmail.com',
                 port: 587,
                 ignoreTLS: false,
                 secure: false,
