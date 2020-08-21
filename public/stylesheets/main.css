@@ -13,12 +13,21 @@ body {
 .faq-container{
     margin-bottom : 10px;
 }
+
 .lp-card-container{
-    width: 80%;
     margin : 20px auto;
     display:grid;
-    grid-template-columns: repeat(3,minmax(300px,30%));
-    column-gap: 20px;
+    grid-template-rows: repeat(3,1fr);
+    row-gap: 20px;
+}
+@media only screen and (min-width:768px){
+    .lp-card-container{
+        width: 80%;
+        margin : 20px auto;
+        display:grid;
+        grid-template-columns: repeat(3,minmax(300px,30%));
+        column-gap: 20px;
+    }
 }
 .user-card{
     width:50%;

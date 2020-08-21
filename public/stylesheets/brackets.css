@@ -1,4 +1,3 @@
-
 .dashboard-header{
     text-align: center;
 }
@@ -8,22 +7,32 @@
     justify-content: space-around;
 }
 .centered-button-group{
-    width : 30%;
+    width : 100%;
     margin : auto;
     display : flex;
     flex-direction: row;
     justify-content: space-evenly;
 }
+.dashboard-pot-score{
+    display: none;
+    
+}
+@media only screen and (min-width:768px){
+    .dashboard-pot-score{
+        display: initial;
+    }
+    .centered-button-group{
+        width: 30%;
+    }
+}
 
 /*------------------------*/
 .bracketTemplate{
-    display: grid;
-    grid-template-columns: minmax(250px,20%) 1fr;
     margin : 10px;
 }
 .bracket-container{
     display: grid;
-    grid-template-columns: repeat(4,minmax(250px,1fr));
+    grid-template-columns: repeat(4,100%);
     grid-template-rows: repeat(18,minmax(45px,1fr));
     column-gap: 50px;
     row-gap: 10px;
@@ -37,27 +46,48 @@
     border: 1px solid #000000;
     background-color: aliceblue;
 }
+.swipe{
+    margin : 10px;
+    padding : 10px;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 1px solid #000000;
+    background-color: rgb(157, 247, 205);
+}
 .show-scores{
     display: grid;
     grid-template-columns: 1fr 1fr;
     font-size: 18px;
+}
+#header{
+    grid-column: 1/5;
+    display : grid;
+    grid-template-columns: repeat(4,1fr);
+    border: 2px solid gold;
+    text-align: center;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+}
+/*NON-MOBILE */
+@media only screen and (min-width:768px){
+    .bracketTemplate{
+        display: grid;
+        grid-template-columns: minmax(250px,20%) 1fr;
+    }
+    .bracket-container{
+        grid-template-columns: repeat(4,minmax(250px,1fr));
+    }
+    .swipe{
+        display:none;
+    }
 }
 #btn-form{
     margin : 10px;
     padding : 5px;
     display:flex;
     flex-direction: column;
-}
-#header{
-    grid-column: 1/5;
-    border: 2px solid gold;
-    display : grid;
-    grid-template-columns: repeat(4,1fr);
-    text-align: center;
-    border-radius: 10px 10px 10px 10px;
-    -moz-border-radius: 10px 10px 10px 10px;
-    -webkit-border-radius: 10px 10px 10px 10px;
-
 }
 .bracket-box{
     border: 1px solid black;

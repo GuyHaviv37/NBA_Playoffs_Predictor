@@ -12,7 +12,9 @@
             <div class="sidebar-form">
                 <div class="show-bracket-name">
                     <h5><%= bracket.bracketName %> </h5>
+                    by <%= bracket.owner.username %> 
                 </div>
+                <hr>
                 <div class="show-scores">
                     <div class="show-score">
                         Score:
@@ -24,12 +26,15 @@
                     </div>
                 </div>
                 <hr>
-                <div class="show-playing">
+                <div class="show-playin">
                     <p class="custom-p">Who Will Win The Play-in Tournument ?
                     <%= teamInfo[bracket.predictions.playin].teamName %> </p>
                 </div>
                 <div id="winner-box"></div>
             </div>
+        </div>
+        <div class="swipe text-center">
+            SWIPE RIGHT ➡️➡️➡️
         </div>
         <div class="bracket-container">
             <div id="header">

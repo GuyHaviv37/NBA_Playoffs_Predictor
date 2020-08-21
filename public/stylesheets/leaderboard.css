@@ -6,3 +6,31 @@
     grid-template-columns: repeat(6,1fr);
     place-items: center;
 }
+.leaderboard-pot-score  {
+    display:none;
+}
+.leaderboard-winner{
+    display:none;
+}
+.leaderboard-owner{
+    display:none;
+}
+.leaderboard-body{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    place-items: center;
+}
+@media only screen and (min-width:768px){
+    .leaderboard-body{
+        grid-template-columns: repeat(6,1fr);
+    }
+    .leaderboard-pot-score  {
+        display:initial;
+    }
+    .leaderboard-winner{
+        display:initial;
+    }
+    .leaderboard-owner{
+        display:initial;
+    }
+}
