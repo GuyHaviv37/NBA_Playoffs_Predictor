@@ -20,6 +20,7 @@ const buildPlayinDiv = ()=>{
     for(let input of playinDiv.querySelectorAll('input')){
         input.addEventListener('input',(e)=>{
             if(e.target.checked){ //relevent ??
+                //since there is a playin matchup only for west conf.
                 const prevWinning = document.querySelector('#west-fr-1 .away-team');
                 if(prevWinning){
                     clearRoute(prevWinning.abbrv,'NA');
@@ -108,9 +109,9 @@ const createTeamInput = (matchup,side)=>{
 const inputEventListener = (e)=>{
         const [matchup,side] = e.target.name.split("|");
         const [,round,] = matchup.split("-");
+        const bracketBox = e.target.parentNode.parentNode;
         // Input's Team information
         const newValue = e.target.value;
-        const bracketBox = e.target.parentNode.parentNode;
         const teamAbbrv = e.target.parentNode.abbrv;
         // Other Team information
         const otherTeamSide = side === 'home' ? 'away' : 'home';
@@ -120,7 +121,8 @@ const inputEventListener = (e)=>{
         }
         const otherTeamValue = otherTeamInput.value;
         const otherTeamAbbrv = otherTeamInput.parentNode.abbrv;
-        if(round==='finals'){
+        // Different behaviour for finals matchup (no need to further place the series winner)
+        if(round==='finals'){ 
             const winnerBox = document.querySelector('#winner-box-text');
             if(newValue === '4'){
                 winnerBox.innerHTML = `<strong>${teamInfo[teamAbbrv].teamName}<strong>`;
@@ -133,7 +135,7 @@ const inputEventListener = (e)=>{
         }
         // Look for the next placement of a winning team
         const [nextMatchupId, newSide] = getNextMatchupId(matchup);
-        const nextMatchup = document.querySelector(`#${nextMatchupId}`);
+        const nextMatchup = document.querySelector(`#${nextMatchupId}`); //nextMatchupBracketBox
         // Main Logic
         if(newValue === '4'){ // This input's team should win
             // Check if there's a previous selected winner, if so remove it and all it's further bracket implications.
@@ -148,8 +150,8 @@ const inputEventListener = (e)=>{
         else { //newValue !== 4
             if(otherTeamValue === '4'){ // other team should be selected as winners
                 const prevWinning = nextMatchup.querySelector(`.${newSide}-team`) 
+                // check for previous selected winner, if it exists and it is NOT the 'other team' we must clear it
                 if(prevWinning && prevWinning.abbrv !== otherTeamAbbrv){ 
-                    // check for previous selected winner, if it exists and it is NOT the 'other team' we must clear it
                     clearRoute(prevWinning.abbrv,round);
                     // create a NEW teamBox for OTHER TEAM as selected series winner
                     const newTeam = createTeamBox(otherTeamAbbrv,nextMatchupId,newSide);
@@ -193,8 +195,8 @@ const getNextMatchupId = (matchupStr)=>{
         return [`${conf}-cf-1`,newSide]
     }
     else{ // round === 'fr'
-    const newMatchup = Number(matchup) <= 2 ? 1 : 2;
-    return [`${conf}-sf-${newMatchup}`,newSide]
+        const newMatchup = Number(matchup) <= 2 ? 1 : 2;
+        return [`${conf}-sf-${newMatchup}`,newSide]
     }
 }
 
@@ -207,19 +209,11 @@ const getTeamAbbrvs = (matchupStr)=>{
     if(round !== 'fr'){
         return ['NA','NA']
     }
-    if(conf === 'east'){
-        switch(matchup){
-            case '1': return [eastSeeds[1],eastSeeds[8]]
-            case '2': return [eastSeeds[4],eastSeeds[5]]
-            case '3': return [eastSeeds[2],eastSeeds[7]]
-            case '4': return [eastSeeds[3],eastSeeds[6]]
-        }
-    } else{
-        switch(matchup){
-            case '1': return [westSeeds[1],westSeeds[8]]
-            case '2': return [westSeeds[4],westSeeds[5]]
-            case '3': return [westSeeds[2],westSeeds[7]]
-            case '4': return [westSeeds[3],westSeeds[6]]
-        }
+    const seeds = conf==='east' ? eastSeeds : westSeeds;
+    switch(matchup){
+        case '1': return [seeds[1],seeds[8]]
+        case '2': return [seeds[4],seeds[5]]
+        case '3': return [seeds[2],seeds[7]]
+        case '4': return [seeds[3],seeds[6]]
     }
 }

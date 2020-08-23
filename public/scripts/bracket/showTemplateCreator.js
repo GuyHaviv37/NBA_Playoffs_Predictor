@@ -1,3 +1,8 @@
+/*
+SHOW METHODS:
+Basically, build the edit form (parse DB predictions onto the form) and then replace all inputs with a 'solid' text.
+*/
+
 const replaceScoreInputs = ()=>{
     const inputs = container.querySelectorAll('input');
     for(let input of inputs){

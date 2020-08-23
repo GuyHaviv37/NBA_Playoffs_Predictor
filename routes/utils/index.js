@@ -9,6 +9,8 @@ westSeeds = ['west','LAL','LAC','DEN','OKC','HOU','UTA','DAL','NA'];
 eastSeeds = ['east','MIL','TOR','BOS','MIA','IND','PHI','BKN','ORL']
 playinTeams = ['playin','POR','MEM']
 
+/*NEEDS REVIEWING*/
+
 const calculateMatchupScore = (adminBracket,userBracket,pred)=>{
         let [,round,] = pred.split("-");
         let adder = 0;
@@ -32,29 +34,6 @@ const calculateMatchupScore = (adminBracket,userBracket,pred)=>{
         return adder;
 }
 
-const calculateMatchupPotScore = (adminBracket,userBracket,eliminated,pred,basicScore)=>{
-    let subber = 0;
-    const adminPreds = adminBracket.predictions;
-    const userPreds = userBracket.predictions;
-    if(adminPreds[pred].winningScore === 0 && adminPreds[pred].losingScore === 0){ //matchup not decided
-        if(eliminated.includes(userPreds[pred].winningTeam)){
-            subber -= (basicScore*2);
-        } else {
-            if(eliminated.includes(userPreds[pred].winningTeam)){
-                subber -= basicScore;
-            }
-        }
-    }
-    else{ //matchup decided
-        subber -= ((basicScore*2)-calculateMatchupScore(adminBracket,userBracket,pred));
-        if(subber === -(basicScore*2)){ // failed winner
-            eliminated.push(userPreds[pred].winningTeam);
-            eliminated.push(userPreds[pred].losingTeam);
-        }
-    }
-    return subber;
-}
-
 const calculateScore = (adminBracket,userBracket)=>{
     let newScore = 0;
     if(adminBracket.predictions.playin && (adminBracket.predictions.playin === userBracket.predictions.playin)
@@ -72,6 +51,31 @@ const calculateScore = (adminBracket,userBracket)=>{
     return newScore;
 }
 
+const calculateMatchupPotScore = (adminBracket,userBracket,eliminated,pred,basicScore)=>{
+    let subber = 0;
+    const adminPreds = adminBracket.predictions;
+    const userPreds = userBracket.predictions;
+    if(adminPreds[pred].winningScore === 0 && adminPreds[pred].losingScore === 0){ //matchup not decided
+        if(eliminated.includes(userPreds[pred].winningTeam)){
+            // user's winning team has been already eliminated from the playoffs - no chance at points
+            subber -= (basicScore*2);
+        } else {
+            if(eliminated.includes(userPreds[pred].losingTeam)){
+                subber -= basicScore;
+            }
+        }
+    }
+    else{ //matchup decided
+        subber -= ((basicScore*2)-calculateMatchupScore(adminBracket,userBracket,pred));
+        if(subber === -(basicScore*2)){ // failed winner === zero points
+            eliminated.push(userPreds[pred].winningTeam);
+            eliminated.push(userPreds[pred].losingTeam);
+        }
+    }
+    return subber;
+}
+
+
 const calculatePotScore = (adminBracket,userBracket)=>{
     const confs = ['east','west'];
     let newPotScore = 550;
@@ -80,7 +84,7 @@ const calculatePotScore = (adminBracket,userBracket)=>{
     const userPreds = userBracket.predictions;
     // Playins
     if(moment(userBracket.lastUpdated).isAfter(moment(PLAYIN_DEADLINE))){
-        newPotScore -= 10 ; // NO ELIMINATED
+        newPotScore -= 10 ; // NO ELIMINATED , playin bonus deduction
     }    
     else if(adminPreds.playin && (adminPreds.playin !== userPreds.playin)){
         eliminated.push(teamInfo[userPreds.playin].teamName);
@@ -93,14 +97,14 @@ const calculatePotScore = (adminBracket,userBracket)=>{
             newPotScore += subber;
         }
     }
-    // Semi-Finals and Conf-Finals
+    // Semi-Finals 
     for(let conf of confs){
         for(let matchup=1;matchup<=2;matchup++){
             let subber = calculateMatchupPotScore(adminBracket,userBracket,eliminated,`${conf}-sf-${matchup}`,20);;
             newPotScore += subber;
         }
     }
-
+    // Conf-Finals
     for(let conf of confs){
         let subber = calculateMatchupPotScore(adminBracket,userBracket,eliminated,`${conf}-cf-1`,30);;
         newPotScore += subber;
@@ -135,6 +139,50 @@ const getTeamAbbrvs = (matchupStr)=>{
     }
 }
 
+const parseRound = (body,result,conf,round,matchup,prevRound)=>{
+    let homeSeed,awaySeed,homeTeam,awayTeam;
+    switch(prevRound){
+        case 'NA':
+            homeSeed = getTeamAbbrvs(`${conf}-${round}-${matchup}`)[0]
+            awaySeed = getTeamAbbrvs(`${conf}-${round}-${matchup}`)[1]
+            homeTeam = teamInfo[homeSeed].teamName;
+            awayTeam = teamInfo[awaySeed].teamName;
+            break;
+        case 'fr':
+            homeTeam = result[`${conf}-${prevRound}-${matchup === 1 ? 1:3}`].winningTeam;
+            awayTeam = result[`${conf}-${prevRound}-${matchup === 1 ? 2:4}`].winningTeam;
+            break;
+        case 'sf':
+            homeTeam = result[`${conf}-${prevRound}-1`].winningTeam;
+            awayTeam = result[`${conf}-${prevRound}-2`].winningTeam;
+            break;
+        case 'cf':
+            homeTeam = result[`east-${prevRound}-1`].winningTeam;
+            awayTeam = result[`west-${prevRound}-1`].winningTeam;
+            break;
+    }
+    let winner;
+    let homeTeamScore = body[`${conf}-${round}-${matchup}|home`] ? body[`${conf}-${round}-${matchup}|home`] : 0;
+    let awayTeamScore = body[`${conf}-${round}-${matchup}|away`] ? body[`${conf}-${round}-${matchup}|away`] : 0;
+    if(homeTeamScore === '4'){
+        result[`${conf}-${round}-${matchup}`] = {
+            winningTeam : homeTeam,
+            winningScore : homeTeamScore,
+            losingTeam : awayTeam,
+            losingScore : awayTeamScore
+        }
+        winner = homeTeam;
+    } else {
+        result[`${conf}-${round}-${matchup}`] = {
+            winningTeam : awayTeam,
+            winningScore : awayTeamScore,
+            losingTeam : homeTeam,
+            losingScore : homeTeamScore
+        }
+        winner = awayTeam;
+    }
+    return winner;
+}
 
 module.exports = {
     parsePredictions(body){
@@ -146,98 +194,21 @@ module.exports = {
         for(let matchup=1;matchup<=4;matchup++){
             for(let conf of confs){
                 let seeds = conf === 'east' ? eastSeeds : westSeeds;
-                let homeSeed = getTeamAbbrvs(`${conf}-fr-${matchup}`)[0]
-                let awaySeed = getTeamAbbrvs(`${conf}-fr-${matchup}`)[1]
-                homeTeam = teamInfo[homeSeed].teamName;
-                awayTeam = teamInfo[awaySeed].teamName;
-                homeTeamScore = body[`${conf}-fr-${matchup}|home`] ? body[`${conf}-fr-${matchup}|home`] : 0;
-                awayTeamScore = body[`${conf}-fr-${matchup}|away`] ? body[`${conf}-fr-${matchup}|away`] : 0;
-                if(homeTeamScore === '4'){
-                    result[`${conf}-fr-${matchup}`] = {
-                        winningTeam : homeTeam,
-                        winningScore : homeTeamScore,
-                        losingTeam : awayTeam,
-                        losingScore : awayTeamScore
-                    }
-                } else {
-                    result[`${conf}-fr-${matchup}`] = {
-                        winningTeam : awayTeam,
-                        winningScore : awayTeamScore,
-                        losingTeam : homeTeam,
-                        losingScore : homeTeamScore
-                    }
-                }
+                parseRound(body,result,conf,'fr',matchup,'NA');
             }
         }
         // Semi-Finals parse:
         for(let matchup=1;matchup<=2;matchup++){
             for(let conf of confs){
-                homeTeam = result[`${conf}-fr-${matchup === 1 ? 1:3}`].winningTeam;
-                awayTeam = result[`${conf}-fr-${matchup === 1 ? 2:4}`].winningTeam;
-                homeTeamScore = body[`${conf}-sf-${matchup}|home`] ? body[`${conf}-sf-${matchup}|home`] : 0;
-                awayTeamScore = body[`${conf}-sf-${matchup}|away`] ? body[`${conf}-sf-${matchup}|away`] : 0;
-                if(homeTeamScore === '4'){
-                    result[`${conf}-sf-${matchup}`] = {
-                        winningTeam : homeTeam,
-                        winningScore : homeTeamScore,
-                        losingTeam : awayTeam,
-                        losingScore : awayTeamScore
-                    }
-                } else {
-                    result[`${conf}-sf-${matchup}`] = {
-                        winningTeam : awayTeam,
-                        winningScore : awayTeamScore,
-                        losingTeam : homeTeam,
-                        losingScore : homeTeamScore
-                    }
-                }
+                parseRound(body,result,conf,'sf',matchup,'fr');
             }
         }
         // Conf-Finals parse
         for(let conf of confs){
-            homeTeam = result[`${conf}-sf-1`].winningTeam;
-            awayTeam = result[`${conf}-sf-2`].winningTeam;
-            homeTeamScore = body[`${conf}-cf-1|home`] ? body[`${conf}-cf-1|home`] : 0;
-            awayTeamScore = body[`${conf}-cf-1|away`] ? body[`${conf}-cf-1|away`] : 0;
-            if(homeTeamScore === '4'){
-                result[`${conf}-cf-1`] = {
-                    winningTeam : homeTeam,
-                    winningScore : homeTeamScore,
-                    losingTeam : awayTeam,
-                    losingScore : awayTeamScore
-                }
-            } else {
-                result[`${conf}-cf-1`] = {
-                    winningTeam : awayTeam,
-                    winningScore : awayTeamScore,
-                    losingTeam : homeTeam,
-                    losingScore : homeTeamScore
-                }
-            }
+            parseRound(body,result,conf,'cf','1','sf');
         }
         // Finals parse:
-        let winner;
-        homeTeam = result[`east-cf-1`].winningTeam;
-        awayTeam = result[`west-cf-1`].winningTeam;
-        homeTeamScore = body[`all-finals-1|home`] ? body[`all-finals-1|home`] : 0;
-        awayTeamScore = body[`all-finals-1|away`] ? body[`all-finals-1|away`] : 0;
-        if(homeTeamScore === '4'){
-            result[`all-finals-1`] = {
-                winningTeam : homeTeam,
-                winningScore : homeTeamScore,
-                losingTeam : awayTeam,
-                losingScore : awayTeamScore
-            }
-            winner = homeTeam;
-        } else {
-            result[`all-finals-1`] = {
-                winningTeam : awayTeam,
-                winningScore : awayTeamScore,
-                losingTeam : homeTeam,
-                losingScore : homeTeamScore
-            }
-            winner = awayTeam;
-        }
+        const winner = parseRound(body,result,'all','finals','1','cf');
         return [result,winner];
     },
     updateScores(adminBracket){

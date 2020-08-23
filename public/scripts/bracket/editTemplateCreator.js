@@ -6,6 +6,12 @@ const predictions = bracket.predictions;
 buildBracketDivs();
 buildPlayinDiv();
 
+/*
+EDIT METHODS:
+Parsing previously submitted predictions onto the HTML structure of the bracket form,
+using the data from the DB and re-filling the bracket with input events.
+Notice that the work is async since we want to fill the predictions by round (as each round based on the previous one).
+*/
 
 const assignBracketName = ()=>{
     const bracketNameInput = sidebar.querySelector("input[type='text']")
@@ -23,20 +29,26 @@ const assignPlayin = ()=>{
         res();
     })
 }
+
+const assignRound = (conf,round,matchup)=>{
+    let homeInput = container.querySelector(`input[name='${conf}-${round}-${matchup}|home']`);
+    let awayInput = container.querySelector(`input[name='${conf}-${round}-${matchup}|away']`);
+    let homeTeamName = container.querySelector(`#${conf}-${round}-${matchup} .home-team .team-name-text`).innerText;
+    let awayTeamName = container.querySelector(`#${conf}-${round}-${matchup} .away-team .team-name-text`).innerText;
+    let matchupResults = predictions[`${conf}-${round}-${matchup}`];
+    let winningTeam = ' '+matchupResults.winningTeam;
+    homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
+    awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
+    homeInput.dispatchEvent(new Event('input'));
+    awayInput.dispatchEvent(new Event('input'));
+}
+
+/* Pull out main logic to seperate function*/
 const assignFirstRound = ()=>{
     return new Promise((res,rej)=>{
         for(conf of confs){
             for(matchup=1;matchup<=4;matchup++){
-                let homeInput = container.querySelector(`input[name='${conf}-fr-${matchup}|home']`);
-                let awayInput = container.querySelector(`input[name='${conf}-fr-${matchup}|away']`);
-                let homeTeamName = container.querySelector(`#${conf}-fr-${matchup} .home-team .team-name-text`).innerText;
-                let awayTeamName = container.querySelector(`#${conf}-fr-${matchup} .away-team .team-name-text`).innerText;
-                let matchupResults = predictions[`${conf}-fr-${matchup}`];
-                let winningTeam = ' '+matchupResults.winningTeam;
-                homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
-                awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
-                homeInput.dispatchEvent(new Event('input'));
-                awayInput.dispatchEvent(new Event('input'));
+                assignRound(conf,'fr',matchup);
             }
         }
         res();
@@ -47,16 +59,7 @@ const assignSemiFinals = ()=>{
     return new Promise((res,rej)=>{
         for(conf of confs){
             for(matchup=1;matchup<=2;matchup++){
-                let homeInput = container.querySelector(`input[name='${conf}-sf-${matchup}|home']`);
-                let awayInput = container.querySelector(`input[name='${conf}-sf-${matchup}|away']`);
-                let homeTeamName = container.querySelector(`#${conf}-sf-${matchup} .home-team .team-name-text`).innerText;
-                let awayTeamName = container.querySelector(`#${conf}-sf-${matchup} .away-team .team-name-text`).innerText;
-                let matchupResults = predictions[`${conf}-sf-${matchup}`];
-                let winningTeam = ' '+matchupResults.winningTeam;
-                homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
-                awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
-                homeInput.dispatchEvent(new Event('input'));
-                awayInput.dispatchEvent(new Event('input'));
+                assignRound(conf,'sf',matchup);
             }
         }
         res();
@@ -66,36 +69,17 @@ const assignSemiFinals = ()=>{
 const assignConfFinals = ()=>{
     return new Promise((res,rej)=>{
         for(conf of confs){
-            let homeInput = container.querySelector(`input[name='${conf}-cf-1|home']`);
-            let awayInput = container.querySelector(`input[name='${conf}-cf-1|away']`);
-            let homeTeamName = container.querySelector(`#${conf}-cf-1 .home-team .team-name-text`).innerText;
-            let awayTeamName = container.querySelector(`#${conf}-cf-1 .away-team .team-name-text`).innerText;
-            let matchupResults = predictions[`${conf}-cf-1`];
-            let winningTeam = ' '+matchupResults.winningTeam;
-            homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
-            awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
-            homeInput.dispatchEvent(new Event('input'));
-            awayInput.dispatchEvent(new Event('input'));
+            assignRound(conf,'cf','1');
         }
         res();
     })
 }
 const assignFinals = ()=>{
     return new Promise((res,rej)=>{
-        let homeInput = container.querySelector(`input[name='all-finals-1|home']`);
-        let awayInput = container.querySelector(`input[name='all-finals-1|away']`);
-        let homeTeamName = container.querySelector(`#all-finals-1 .home-team .team-name-text`).innerText;
-        let awayTeamName = container.querySelector(`#all-finals-1 .away-team .team-name-text`).innerText;
-        let matchupResults = predictions[`all-finals-1`];
-        let winningTeam = ' '+matchupResults.winningTeam;
-        homeInput.value = homeTeamName === winningTeam ? matchupResults.winningScore : matchupResults.losingScore;
-        awayInput.value = homeTeamName === winningTeam ? matchupResults.losingScore : matchupResults.winningScore;
-        homeInput.dispatchEvent(new Event('input'));
-        awayInput.dispatchEvent(new Event('input'));
+        assignRound('all','finals','1');
         res();
     })
 }
-
 
 
 const buildEditForm = async ()=>{
@@ -108,6 +92,7 @@ const buildEditForm = async ()=>{
         await assignFinals();
     } catch (err) {
         //Really nothing of signifigance here
+        console.log(err);
     }
 }
 
