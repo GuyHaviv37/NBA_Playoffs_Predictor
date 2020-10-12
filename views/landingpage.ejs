@@ -5,7 +5,10 @@
         </div>
     <% } %> 
     <div class="topContainer text-center">
-        <h1>Welcome to NBA Playoffs Predictor</h1>
+        <h1 style="margin-bottom:15px;">Welcome to NBA Playoffs Predictor</h1>
+        <!-- Small additions after game is over for this season -->
+        <h3>Game Over - The NBA's 2020 Champions are the Los Angeles Lakers !</h3>
+        <p style="font-size: larger;">Our Playoffs Predictor Champ : <a href="/bracket/<%= brackets[0]._id %> "><%= brackets[0].owner.username %></a> with a score of <%= brackets[0].score %> <br> Thanks to everyone who played !! See you next season !</p>
     <% if (currentUser) { %>
         <div class="card user-card shadow">
             <h4 class="card-header">Hello, <%= currentUser.username %> </h4>
