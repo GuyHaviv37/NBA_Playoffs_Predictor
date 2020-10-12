@@ -1,6 +1,6 @@
 const express = require('express'),
       {isLoggedIn,isBracketValid,checkHasBracket,checkBracketOwnership,isDeadlinePassed} = require('../middleware'),
-      {parsePredictions,updateScores} = require('../utils/index')
+      {parsePredictions,updateScores,IS_GAME_OVER} = require('../utils/index')
       User = require('../../models/user'),
       Bracket = require('../../models/bracket'),
       {teamInfo,abbrvTrans} = require('../utils/teamInfo');
@@ -9,7 +9,7 @@ const router = express.Router();
 // DASHBOARD ROUTE - SEE MY BRACKET
 router.get('/bracket',isLoggedIn,async (req,res)=>{
     const bracket = await Bracket.findOne({"owner.id" : req.user._id})
-    res.render('bracket/dashboard',{bracket});
+    res.render('bracket/dashboard',{bracket,gameOver : IS_GAME_OVER});
 })
 
 // CREATE ROUTES
@@ -18,6 +18,10 @@ router.get('/bracket/new',isLoggedIn,checkHasBracket,isDeadlinePassed,(req,res)=
 })
 
 router.post('/bracket/new',isLoggedIn,checkHasBracket,isDeadlinePassed,isBracketValid,async (req,res)=>{
+    if(IS_GAME_OVER){ //added 13/10/20
+        req.flash('error','Cannot submit brackets - game is over.');
+        return res.redirect('/bracket/new')
+    }
     const owner = {
         id : req.user._id,
         username : req.user.username
@@ -60,6 +64,10 @@ router.get('/bracket/:id/edit',isLoggedIn,isDeadlinePassed,checkBracketOwnership
 
 router.put('/bracket/:id/edit',isLoggedIn,checkBracketOwnership,isDeadlinePassed,isBracketValid,async (req,res)=>{
     try{
+        if(IS_GAME_OVER){ //added 13/10/20
+            req.flash('error','Cannot edit brackets - game is over.');
+            res.redirect('/bracket/new')
+        }
         const foundBracket = await Bracket.findById(req.params.id);
         const bracketName = req.body.bracketName ? req.body.bracketName : `${owner.username}'s Bracket`;
         const [predictions,winner] = parsePredictions(req.body);
@@ -81,6 +89,10 @@ router.put('/bracket/:id/edit',isLoggedIn,checkBracketOwnership,isDeadlinePassed
 // DESTORY ROUTES
 router.delete('/bracket/:id',isLoggedIn,isDeadlinePassed,checkBracketOwnership,async (req,res)=>{
     try{
+        if(IS_GAME_OVER){ //added 13/10/20
+            req.flash('error','Cannot delete brackets - game is over.');
+            res.redirect('/bracket/new')
+        }
         await Bracket.findByIdAndDelete(req.params.id);
         res.redirect('/bracket');
     } catch (err) {

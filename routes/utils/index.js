@@ -4,6 +4,7 @@ const moment = require('moment');
 
 const SUBMIT_DEADLINE =  '2020-08-17';
 const PLAYIN_DEADLINE =  '2020-08-15T16:00:00';
+const IS_GAME_OVER = true; // changed 13/10/20
 
 westSeeds = ['west','LAL','LAC','DEN','OKC','HOU','UTA','DAL','NA'];
 eastSeeds = ['east','MIL','TOR','BOS','MIA','IND','PHI','BKN','ORL']
@@ -229,5 +230,6 @@ module.exports = {
         })
     },
     SUBMIT_DEADLINE,
-    PLAYIN_DEADLINE
+    PLAYIN_DEADLINE,
+    IS_GAME_OVER
 }

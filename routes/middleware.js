@@ -1,7 +1,8 @@
 const {validationResult} = require('express-validator');
 const Bracket = require('../models/bracket');
 const moment = require('moment');
-const {SUBMIT_DEADLINE} = require('./utils/index')
+const {SUBMIT_DEADLINE,IS_GAME_OVER} = require('./utils/index')
+
 
 
 module.exports = {
@@ -97,7 +98,7 @@ module.exports = {
         }
     },
     isDeadlinePassed(req,res,next){
-        if(req.user.isAdmin){
+        if(req.user.isAdmin || IS_GAME_OVER){
             return next();
         }
         if(moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))){

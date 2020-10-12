@@ -9,7 +9,7 @@
             <!-- No bracket: create one to show dashboard -->
             <div class="jumbotron jumbo-dash shadow">
                 <h1 class="display-3">Hi There!</h1>
-                <% if (moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))) { %>
+                <% if (!gameOver && moment(Date.now()).isAfter(moment(SUBMIT_DEADLINE))  ) { %>
                     <p class="lead">
                         It's seemd like you don't have a Bracket yet.
                         Unfortunately, Bracket creation is disabled at this time.
